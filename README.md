@@ -20,17 +20,16 @@
 
 ## Установка и запуск
 
-### 1. Клонирование и настройка
+### 1. Быстрая установка
+Используйте автоматический скрипт для настройки окружения:
 ```bash
-git clone <your-repo-url>
-cd task_manager_tg
-python3 -m venv venv
-source venv/bin/activate  # или venv\Scripts\activate на Windows
-pip install -r requirements.txt
+chmod +x setup.sh
+./setup.sh
 ```
+*Скрипт проверит наличие Python, создаст виртуальное окружение, установит все зависимости и подготовит файл `.env`.*
 
 ### 2. Конфигурация
-Создайте файл `.env` в корне проекта:
+Откройте созданный файл `.env` и вставьте свои ключи:
 ```env
 TELEGRAM_BOT_TOKEN=ваш_токен_бота
 OPENAI_API_KEY=ваш_ключ_openai
@@ -38,20 +37,23 @@ DATABASE_URL=sqlite:///./tasks.db
 ```
 
 ### 3. Запуск приложения
-Проект требует запуска четырех компонентов одновременно:
+После настройки запустите три основных процесса (рекомендуется в разных терминалах):
 
 **А. Запуск Backend API:**
 ```bash
+source venv/bin/activate
 uvicorn backend.main:app --reload --port 8000
 ```
 
 **Б. Запуск Telegram бота:**
 ```bash
+source venv/bin/activate
 python bot_logic/bot.py
 ```
 
 **В. Запуск воркера уведомлений:**
 ```bash
+source venv/bin/activate
 python backend/worker.py
 ```
 
