@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+python-dotenv
+python-telegram-bot
+openai
+apscheduler
+sqlalchemy-utils
+passlib[bcrypt]
+python-multipart

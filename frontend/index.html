@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager TG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .task-card:hover { transform: translateY(-2px); transition: all 0.2s; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div id="app" class="min-h-screen flex flex-col">
+        <!-- Навигация -->
+        <nav class="bg-white border-b p-4 shadow-sm">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-xl font-bold text-blue-600">TaskManager</h1>
+                <div id="user-info" class="hidden text-sm text-gray-600"></div>
+            </div>
+        </nav>
+
+        <main class="flex-grow container mx-auto p-4 max-w-4xl">
+            <!-- Экран авторизации -->
+            <section id="auth-screen" class="mt-20 flex flex-col items-center justify-center sm:mt-40">
+                <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border">
+                    <h2 class="text-2xl font-bold mb-6 text-center">Авторизация через Telegram</h2>
+                    <p class="text-gray-500 mb-6 text-center text-sm">Введите ваш номер телефона (+7...), и мы пришлем код в Telegram.</p>
+                    <input type="text" id="phone-input" placeholder="+79000000000" 
+                           class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button id="btn-request-code" class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        Получить код
+                    </button>
+                    <div id="code-input-container" class="hidden mt-4">
+                        <input type="text" id="code-input" placeholder="Код из Telegram" 
+                               class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button id="btn-verify-code" class="w-full bg-green-600 text-white p-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                            Подтвердить
+                        </button>
+                    </div>
+                    <p id="auth-msg" class="mt-4 text-center text-sm text-red-500"></p>
+                </div>
+            </section>
+
+            <!-- Рабочее пространство -->
+            <section id="workspace" class="hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold">Дела на этот месяц</h2>
+                    <button id="btn-add-task" class="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition">
+                        + Добавить дело
+                    </button>
+                </div>
+                
+                <!-- Сетка дел -->
+                <div id="tasks-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Задачи загружаются сюда -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
