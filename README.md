@@ -49,10 +49,10 @@ DATABASE_URL=sqlite:///./tasks.db
 ### 3. Запуск приложения
 После настройки запустите три основных процесса (рекомендуется в разных терминалах):
 
-**А. Запуск Backend API:**
+# А. Запуск Backend API (слушает все интерфейсы):
 ```bash
 source venv/bin/activate
-uvicorn backend.main:app --reload --port 8000
+uvicorn backend.main:app --host 0.0.0.0 --port 8000
 ```
 
 **Б. Запуск Telegram бота:**

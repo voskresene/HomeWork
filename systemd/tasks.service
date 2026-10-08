@@ -1,0 +1,50 @@
+# Backend Service
+[Unit]
+Description=Task Manager Backend (FastAPI)
+After=network.target
+
+[Service]
+User=agent
+Group=agent
+WorkingDirectory=/home/agent/task_manager_tg
+Environment=PATH=/home/agent/task_manager_tg/venv/bin
+ExecStart=/home/agent/task_manager_tg/venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+# Bot Service
+[Unit]
+Description=Task Manager Telegram Bot
+After=network.target
+
+[Service]
+User=agent
+Group=agent
+WorkingDirectory=/home/agent/task_manager_tg
+Environment=PATH=/home/agent/task_manager_tg/venv/bin
+ExecStart=/home/agent/task_manager_tg/venv/bin/python bot_logic/bot.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+# Worker Service
+[Unit]
+Description=Task Manager Notifications Worker
+After=network.target
+
+[Service]
+User=agent
+Group=agent
+WorkingDirectory=/home/agent/task_manager_tg
+Environment=PATH=/home/agent/task_manager_tg/venv/bin
+ExecStart=/home/agent/task_manager_tg/venv/bin/python backend/worker.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
