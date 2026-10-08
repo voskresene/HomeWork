@@ -9,7 +9,7 @@ echo -e "${GREEN}>>> Начинаю установку проекта...${NC}"
 
 # 1. Проверка наличия Python
 if ! command -v python3 &> /dev/null; then
-    echo -e "${RED}Ошибка: Python3 не установлен.${NC}"
+    echo -e "${RED}Ошибка: Python3 не установлен. Пожалуйста, установите его перед запуском скрипта.${NC}"
     echo "Пожалуйста, установите Python3 перед запуском скрипта:"
     echo "  - Ubuntu/Debian: sudo apt update && sudo apt install python3"
     echo "  - macOS: brew install python"
@@ -19,18 +19,26 @@ fi
 
 # 2. Создание виртуального окружения
 echo ">>> Создание виртуального окружения (venv)..."
-python3 -m venv venv
+# Используем флаг --without-pip для предотвращения ошибок ensurepip в специфических дистрибутивах
+python3 -m venv venv --without-pip
 if [ $? -eq 0 ]; then
-    echo -e "${GREEN}Виртуальное окружение успешно создано.${NC}"
+    echo -e "${GREEN}Виртуальное окружение создано.${NC}"
 else
     echo -e "${RED}Ошибка при создании venv.${NC}"
     exit 1
 fi
 
-# 3. Установка зависимостей
-echo ">>> Установка зависимостей..."
+# 3. Установка pip и зависимостей
+echo ">>> Установка pip и зависимостей..."
+# Устанавливаем pip напрямую в виртуальное окружение
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+./venv/bin/python3 get-pip.py
+rm get-pip.py
+
+# Теперь pip доступен в venv, обновляем его и ставим зависимости
 ./venv/bin/pip install --upgrade pip
 ./venv/bin/pip install -r requirements.txt
+
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}Зависимости успешно установлены.${NC}"
 else
