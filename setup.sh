@@ -9,7 +9,11 @@ echo -e "${GREEN}>>> Начинаю установку проекта...${NC}"
 
 # 1. Проверка наличия Python
 if ! command -v python3 &> /dev/null; then
-    echo -e "${RED}Ошибка: Python3 не установлен. Пожалуйста, установите его перед запуском скрипта.${NC}"
+    echo -e "${RED}Ошибка: Python3 не установлен.${NC}"
+    echo "Пожалуйста, установите Python3 перед запуском скрипта:"
+    echo "  - Ubuntu/Debian: sudo apt update && sudo apt install python3"
+    echo "  - macOS: brew install python"
+    echo "  - Windows: Скачайте установщик с python.org"
     exit 1
 fi
 
@@ -23,11 +27,10 @@ else
     exit 1
 fi
 
-# 3. Активация venv и установка зависимостей
+# 3. Установка зависимостей
 echo ">>> Установка зависимостей..."
-source venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
+./venv/bin/pip install --upgrade pip
+./venv/bin/pip install -r requirements.txt
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}Зависимости успешно установлены.${NC}"
 else
