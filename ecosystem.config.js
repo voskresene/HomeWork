@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'task-manager-backend',
-      script: 'python3 -m uvicorn backend.main:app',
-      interpreter: 'python3',
+      script: 'backend.main:app',
+      interpreter: './venv/bin/python3',
       exec_mode: 'cluster',
       env: {
         NODE_ENV: 'production',
@@ -18,7 +18,7 @@ module.exports = {
     {
       name: 'task-manager-bot',
       script: 'bot_logic/bot.py',
-      interpreter: 'python3',
+      interpreter: './venv/bin/python3',
       env: {
         NODE_ENV: 'production',
       },
@@ -29,7 +29,7 @@ module.exports = {
     {
       name: 'task-manager-worker',
       script: 'backend/worker.py',
-      interpreter: 'python3',
+      interpreter: './venv/bin/python3',
       env: {
         NODE_ENV: 'production',
       },
