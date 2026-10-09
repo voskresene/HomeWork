@@ -19,7 +19,6 @@ fi
 
 # 2. Создание виртуального окружения
 echo ">>> Создание виртуального окружения (venv)..."
-# Используем флаг --without-pip для предотвращения ошибок ensurepip в специфических дистрибутивах
 python3 -m venv venv --without-pip
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}Виртуальное окружение создано.${NC}"
@@ -30,12 +29,10 @@ fi
 
 # 3. Установка pip и зависимостей
 echo ">>> Установка pip и зависимостей..."
-# Устанавливаем pip напрямую в виртуальное окружение
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 ./venv/bin/python3 get-pip.py
 rm get-pip.py
 
-# Теперь pip доступен в venv, обновляем его и ставим зависимости
 ./venv/bin/pip install --upgrade pip
 ./venv/bin/pip install -r requirements.txt
 
@@ -46,7 +43,27 @@ else
     exit 1
 fi
 
-# 4. Создание файла .env
+# 4. Проверка и установка PM2
+echo ">>> Проверка PM2..."
+if ! command -v pm2 &> /dev/null; then
+    echo "PM2 не найден. Попытка установки..."
+    if command -v npm &> /dev/null; then
+        npm install -g pm2
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}PM2 успешно установлен.${NC}"
+        else
+            echo -e "${RED}Ошибка при установке PM2 через npm.${NC}"
+            exit 1
+        fi
+    else
+        echo -e "${RED}Ошибка: NPM не найден. Установите Node.js, чтобы использовать PM2.${NC}"
+        exit 1
+    fi
+else
+    echo -e "${GREEN}PM2 уже установлен.${NC}"
+fi
+
+# 5. Создание файла .env
 if [ ! -f .env ]; then
     echo ">>> Создание файла .env..."
     cat <<EOF > .env
@@ -61,6 +78,5 @@ else
 fi
 
 echo -e "${GREEN}>>> Установка завершена!${NC}"
-echo "Чтобы запустить проект, используйте:"
-echo "1. source venv/bin/activate"
-echo "2. Запустите backend, бота и воркера (см. README.md)"
+echo "Чтобы запустить проект, выполните:"
+echo "pm2 start_ecosystem ecosystem.config.js"

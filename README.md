@@ -36,42 +36,54 @@ git clone <your-repo-url> && cd task_manager_tg && chmod +x setup.sh && ./setup.
 chmod +x setup.sh
 ./setup.sh
 ```
-*Скрипт проверит наличие Python, создаст виртуальное окружение, установит все зависимости и подготовит файл `.env`.*
 
 ### 2. Конфигурация
-Откройте созданный файл `.env` и вставьте свои ключи:
+Откройте созданный файл `.env` в корне проекта и вставьте свои ключи:
 ```env
 TELEGRAM_BOT_TOKEN=ваш_токен_бота
 OPENAI_API_KEY=ваш_ключ_openai
 DATABASE_URL=sqlite:///./tasks.db
 ```
 
-### 3. Запуск приложения
-После настройки запустите три основных процесса (рекомендуется в разных терминалах):
+### 3. Развертывание (Production)
 
-# А. Запуск Backend API (слушает все интерфейсы):
+#### Вариант А: PM2 (Рекомендуется)
+Самый простой способ запустить все сервисы одновременно с автоперезагрузкой (требуется установленный Node.js и PM2):
 ```bash
+# Установка PM2 если нет
+npm install -g pm2
+
+# Запуск проекта
+pm2 start ecosystem.config.js
+pm2 save
+pm2 startup
+```
+
+#### Вариант Б: Systemd (Системные службы)
+Если вы хотите использовать стандартные службы Linux:
+```bash
+sudo cp systemd/*.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now backend bot worker
+```
+
+### 4. Запуск приложения (Development)
+Если вы запускаете локально без PM2, откройте три терминала:
+```bash
+# Терминал 1: Backend
 source venv/bin/activate
 uvicorn backend.main:app --host 0.0.0.0 --port 8000
-```
 
-**Б. Запуск Telegram бота:**
-```bash
+# Терминал 2: Bot
 source venv/bin/activate
 python bot_logic/bot.py
-```
 
-**В. Запуск воркера уведомлений:**
-```bash
+# Терминал 3: Worker
 source venv/bin/activate
 python backend/worker.py
 ```
 
-**Г. Веб-интерфейс:**
-Просто откройте файл `frontend/index.html` в браузере или запустите локальный сервер:
-```bash
-python3 -m http.server 8000 --directory frontend
-```
+**Веб-интерфейс** будет доступен по адресу `http://<ваш_ip>:8000`.
 
 ## Технологический стек
 - **Backend:** FastAPI, SQLAlchemy, SQLite
