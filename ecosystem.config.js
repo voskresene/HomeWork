@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'task-manager-backend',
-      script: 'backend.main:app',
+      script: 'python3 -m uvicorn backend.main:app',
       interpreter: 'python3',
       exec_mode: 'cluster',
       env: {
